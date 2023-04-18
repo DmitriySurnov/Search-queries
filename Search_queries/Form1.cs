@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Poisk
 {
@@ -14,11 +15,23 @@ namespace Poisk
             InitializeComponent();
         }
 
+        private void ErrorBox()
+        {
+            MessageBox.Show(
+                   "Вы не ввели запрос для поиска",
+                   "Ошибка",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+        }
+
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
             listBoxResult.Items.Clear();
-            if (textBoxQueryString.Text == "")
+            if (string.IsNullOrWhiteSpace(textBoxQueryString.Text))
+            {
+                ErrorBox();
                 return;
+            }
             Uri baseURI = new Uri("https://www.google.com");
             Uri newURI = new Uri(baseURI, "search?q=" + textBoxQueryString.Text.Replace(" ", "+"));
             HttpWebRequest reqw = (HttpWebRequest)HttpWebRequest.Create(newURI);
